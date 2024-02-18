@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 public class VButton extends VAbstractButton {
 	
 	private String text;
-	private int[] fontSize = {50, 0};
-	private int[] round = {50, 0};
+	private VAdjustInt fontSize = new VAdjustInt(50);
+	private VAdjustInt round = new VAdjustInt(50);
 	
 	// Couleur noraml du boutton.
 	private Color background = new Color(0, 0, 0, 200);
@@ -45,36 +45,12 @@ public class VButton extends VAbstractButton {
 		this.text = text;
 	}
 	
-	public int getFontSize() {
-		return fontSize[0];
+	public VAdjustInt getFontSize() {
+		return fontSize;
 	}
 	
-	public void setFontSize(int fontSize) {
-		this.fontSize[0] = fontSize;
-	}
-	
-	public int getActualFontSize() {
-		return fontSize[1];
-	}
-	
-	public void setActualFontSize(int fontSize) {
-		this.fontSize[1] = fontSize;
-	}
-	
-	public int getRound() {
-		return round[0];
-	}
-	
-	public void setRound(int round) {
-		this.round[0] = round;
-	}
-	
-	public int getActualRound() {
-		return round[1];
-	}
-	
-	public void setActualRound(int round) {
-		this.round[1] = round;
+	public VAdjustInt getRound() {
+		return round;
 	}
 	
 	public Color getBackground() {
@@ -128,49 +104,29 @@ public class VButton extends VAbstractButton {
 	@Override
 	public void adjust(int widthReference, int heightReference) {
 		super.adjust(widthReference, heightReference);
-		switch (getAdjustment()) {
-		case NO_ADJUSTMENT :
-			fontSize[1] = fontSize[0];
-			round[1] = round[0];
-			break;
-		case ADJUSTMENT_BY_WIDTH_AND_HEIGHT :
-			fontSize[1] = getActualWidthReference()*fontSize[0]/getWidthReference();
-			round[1] = getActualWidthReference()*round[0]/getWidthReference();
-			break;
-		case ADJUSTMENT_BY_WIDTH :
-			fontSize[1] = getActualWidthReference()*fontSize[0]/getWidthReference();
-			round[1] = getActualWidthReference()*round[0]/getWidthReference();
-			break;
-		case ADJUSTMENT_BY_HEIGHT :
-			fontSize[1] = getActualHeightReference()*fontSize[0]/getHeightReference();
-			round[1] = getActualHeightReference()*round[0]/getHeightReference();
-			break;
-		default :
-//			if (widthReference[0]*w[0]/widthReference[1] >= heightReference[0]*w[0]/heightReference[1]) {
-//				autoAdjustment = PitiButton.ADJUSTMENT_BY_WIDTH;
-//				adjust(width, height);
-//			} else {
-//				autoAdjustment = PitiButton.ADJUSTMENT_BY_HEIGHT;
-//				adjust(width, height);
-//			}
-//			autoAdjustment = PitiButton.ADJUSTMENT_BY_THE_SMALLEST;
-		}
+		adjustValue(fontSize);
+		adjustValue(round);
 	}
 	
 	@Override
 	public void display(Graphics2D g2d) {
 		g2d.setColor(!isMouseIn()? background : survolBackground);
-		g2d.fillRoundRect(getActualX(), getActualY(), getActualWidth(), getActualHeight(), round[1], round[1]);
+		g2d.fillRoundRect(getX().getCurrentValue(), getY().getCurrentValue(),
+						  getWidth().getCurrentValue(), getHeight().getCurrentValue(),
+						  round.getCurrentValue(), round.getCurrentValue());
 		
 		g2d.setColor(isMouseIn()? border : survolBorder);
-		g2d.drawRoundRect(getActualX(), getActualY(), getActualWidth(), getActualHeight(), round[1], round[1]);
+		g2d.drawRoundRect(getX().getCurrentValue(), getY().getCurrentValue(),
+						  getWidth().getCurrentValue(), getHeight().getCurrentValue(),
+						  round.getCurrentValue(), round.getCurrentValue());
 		
 		if (text != null) {
 			g2d.setColor(!isMouseIn()? foreground : survolForeground);
-			g2d.setFont(new Font("ARIAL", Font.BOLD, fontSize[1]));
+			g2d.setFont(new Font("ARIAL", Font.BOLD, fontSize.getCurrentValue()));
 			int textW = UsefulTh.getTextW(text, g2d);
 			int textH = UsefulTh.getTextH(text, g2d);
-			UsefulTh.drawString(text, getActualX()+getActualWidth()/2-textW/2, getActualY()+getActualHeight()/2+textH/2, g2d);
+			UsefulTh.drawString(text, getX().getCurrentValue()+getWidth().getCurrentValue()/2-textW/2,
+								getX().getCurrentValue()+getHeight().getCurrentValue()/2+textH/2, g2d);
 		}
 	}
 }
