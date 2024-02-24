@@ -12,7 +12,7 @@ public class VScrollPane extends VComponent {
 	
 	private VPanel vp;
 	
-private KeyListener kl = new KeyListener() {
+	private KeyListener kl = new KeyListener() {
 		
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -87,8 +87,8 @@ private KeyListener kl = new KeyListener() {
 		this.vp = vp;
 		
 		if (this.vp != null) {
-			vp.setWidthReference(getWidth());
-			vp.setHeightReference(getHeight());
+			vp.getWidthReference().setValue(getWidth().getValue());
+			vp.getHeightReference().setValue(getHeight().getValue());
 			vp.setAdjustment(ADJUSTMENT_BY_WIDTH_AND_HEIGHT);
 			vp.setAlignment(NO_ALIGNMENT);
 		}
@@ -97,19 +97,28 @@ private KeyListener kl = new KeyListener() {
 	@Override
 	public void adjust(int widthRefrence, int heightRefrence) {
 		super.adjust(widthRefrence, heightRefrence);
-		vp.setActualX(vp.getActualX()+getActualX());
-		vp.setActualY(vp.getActualY()+getActualY());
-		vp.adjust(getActualWidth(), getActualHeight());
+		vp.getX().setCurrentValue(vp.getX().getCurrentValue()
+								  +getX().getCurrentValue());
+		vp.getY().setCurrentValue(vp.getY().getCurrentValue()
+								  +getY().getCurrentValue());
+		vp.adjust(getWidth().getCurrentValue(),
+				  getHeight().getCurrentValue());
 	}
 	
 	@Override
 	public void display(Graphics2D g2d) {
 		if (vp != null) {
-			BufferedImage bi = new BufferedImage(getActualWidth(), getActualHeight(), BufferedImage.TYPE_INT_ARGB);
+			int currentX = getX().getCurrentValue();
+			int currentY = getY().getCurrentValue();
+			int currentWidth = getWidth().getCurrentValue();
+			int currentHeight = getHeight().getCurrentValue();
+			
+			BufferedImage bi = new BufferedImage(currentWidth, currentHeight,
+												 BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2dBi = bi.createGraphics();
 			
 			vp.display(g2dBi);
-			g2d.drawImage(bi, getActualX(), getActualY(), getActualWidth(), getActualHeight(), null);
+			g2d.drawImage(bi, currentX, currentY, currentWidth, currentHeight, null);
 			g2dBi.dispose();
 		}
 	}

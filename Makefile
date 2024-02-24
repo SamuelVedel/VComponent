@@ -12,7 +12,7 @@ JCFLAGS := -encoding iso-8859-1 -d $(OUT_DIR)/ -cp $(SRC_DIR)/
 .PHONY: all project clean
 
 all: done
-	java -cp $(OUT_DIR) fr.svedel.fod.MainFOD
+	#java -cp $(OUT_DIR) fr.svedel.fod.MainFOD
 
 %.class: %.java
 	$(JC) $(JCFLAGS) $?
