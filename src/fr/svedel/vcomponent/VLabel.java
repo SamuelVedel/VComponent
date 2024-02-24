@@ -75,13 +75,17 @@ public class VLabel extends VComponent {
 	
 	@Override
 	public void display(Graphics2D g2d) {
+		int currentX = getX().getCurrentValue();
+		int currentY = getY().getCurrentValue();
+		int currentWidth = getWidth().getCurrentValue();
+		int currentHeight = getHeight().getCurrentValue();
+		
 		g2d.setFont(new Font(fontName, fontStyle, fontSize.getValue()));
 		getWidth().setValue(UsefulTh.getTextW(text, g2d));
 		getHeight().setValue(UsefulTh.getTextH(text, g2d));
 		
 		g2d.setColor(color);
 		g2d.setFont(new Font(fontName, fontStyle, fontSize.getCurrentValue()));
-		UsefulTh.drawString(text, getX().getCurrentValue(),
-							getY().getCurrentValue()+getHeight().getCurrentValue(), g2d);
+		UsefulTh.drawString(text, currentX, currentY+currentHeight, g2d);
 	}
 }

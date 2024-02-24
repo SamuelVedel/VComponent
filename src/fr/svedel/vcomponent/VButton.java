@@ -110,14 +110,17 @@ public class VButton extends VAbstractButton {
 	
 	@Override
 	public void display(Graphics2D g2d) {
+		int currentX = getX().getCurrentValue();
+		int currentY = getY().getCurrentValue();
+		int currentWidth = getWidth().getCurrentValue();
+		int currentHeight = getHeight().getCurrentValue();
+		
 		g2d.setColor(!isMouseIn()? background : survolBackground);
-		g2d.fillRoundRect(getX().getCurrentValue(), getY().getCurrentValue(),
-						  getWidth().getCurrentValue(), getHeight().getCurrentValue(),
+		g2d.fillRoundRect(currentX, currentY, currentWidth, currentHeight,
 						  round.getCurrentValue(), round.getCurrentValue());
 		
 		g2d.setColor(isMouseIn()? border : survolBorder);
-		g2d.drawRoundRect(getX().getCurrentValue(), getY().getCurrentValue(),
-						  getWidth().getCurrentValue(), getHeight().getCurrentValue(),
+		g2d.drawRoundRect(currentX, currentY, currentWidth, currentHeight,
 						  round.getCurrentValue(), round.getCurrentValue());
 		
 		if (text != null) {
@@ -125,8 +128,8 @@ public class VButton extends VAbstractButton {
 			g2d.setFont(new Font("ARIAL", Font.BOLD, fontSize.getCurrentValue()));
 			int textW = UsefulTh.getTextW(text, g2d);
 			int textH = UsefulTh.getTextH(text, g2d);
-			UsefulTh.drawString(text, getX().getCurrentValue()+getWidth().getCurrentValue()/2-textW/2,
-								getX().getCurrentValue()+getHeight().getCurrentValue()/2+textH/2, g2d);
+			UsefulTh.drawString(text, currentX+currentWidth/2-textW/2,
+								currentX+currentHeight/2+textH/2, g2d);
 		}
 	}
 }
