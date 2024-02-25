@@ -380,12 +380,12 @@ public abstract class VComponent
 			break;
 		case ADJUSTMENT_BY_HEIGHT :
 			width.adjust(heightReference);
-			width.adjust(heightReference);
+			height.adjust(heightReference);
 			
 			if (autoAlignment == NO_ALIGNMENT) {
 				x.adjust(heightReference);
 			} else if (autoAlignment == CENTER_ALIGNMENT) {
-				x.adjust(x.getValue()+width.getCurrentValue()/2, widthReference);
+				x.adjust(x.getValue()+width.getValue()/2, widthReference);
 				x.setCurrentValue(x.getCurrentValue()-width.getCurrentValue()/2);
 				//x[1] = widthReference[1]*(x[0]+width[0]/2)/widthReference[0]-width[1]/2;
 			} else if (autoAlignment == BOTTOM_ALIGNMENT) {

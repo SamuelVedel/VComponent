@@ -129,7 +129,7 @@ public class VButton extends VAbstractButton {
 			int textW = UsefulTh.getTextW(text, g2d);
 			int textH = UsefulTh.getTextH(text, g2d);
 			UsefulTh.drawString(text, currentX+currentWidth/2-textW/2,
-								currentX+currentHeight/2+textH/2, g2d);
+								currentY+currentHeight/2+textH/2, g2d);
 		}
 	}
 }
