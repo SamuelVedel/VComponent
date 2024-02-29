@@ -29,14 +29,15 @@ public class Test {
 	private VPanel vp = new VPanel(0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 	private final int VB_WIDTH = 100;
 	private final int VB_HEIGHT = 80;
-	private VButton vb = new VButton(WIDTH/2-VB_WIDTH/2, HEIGHT/2-VB_HEIGHT/2, VB_WIDTH, VB_HEIGHT);
+	private VButton vb = new VButton(WIDTH/2-VB_WIDTH/2, HEIGHT/2-VB_HEIGHT/2,
+									 VB_WIDTH, VB_HEIGHT);
 	private VSwitch vs = new VSwitch(50, 50, /*110,*/ 50);
 	
 	private VLabel vl = new VLabel(50, 100, "Hey salut battard");
 	
 	private VNumberWriter vnw = new VNumberWriter(50, 150, /*50,*/ 30);
 	
-//	private VScrollPane jsp = new VScrollPane(100, 100, 100, 100, null);
+	private VScrollPane vsp = new VScrollPane(100, 300, 100, 100);
 	
 	private Painter paint = new Painter();
 	
@@ -128,7 +129,7 @@ public class Test {
 	}
 	
 	private void initVsp() {
-		VPanel vp2 = new VPanel(0, 0, 100, 600, WIDTH, HEIGHT);
+		VPanel vp2 = new VPanel(0, 0, 300, 600, WIDTH, HEIGHT);
 		VSwitch[] vss = new VSwitch[10];
 		final int vsGap = 5;
 		final int vsH = 50;
@@ -145,17 +146,17 @@ public class Test {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				System.out.println("hay");
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+				System.out.println("out");
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				System.out.println("hey");
+				System.out.println("in");
 			}
 			
 			@Override
@@ -163,8 +164,8 @@ public class Test {
 				
 			}
 		});
-//		jsp.setVPanel(vp2);
-//		vp.add(jsp);
+		vsp.setVPanel(vp2);
+		vp.add(vsp);
 	}
 	
 	private class Painter extends JPanel {

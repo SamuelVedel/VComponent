@@ -59,10 +59,18 @@ public class VPanel extends VComponent {
 		}
 		
 		@Override
-		public void mouseExited(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {
+			for (VComponent vc : vcList) {
+				vc.mouseExited(e);
+			}
+		}
 		
 		@Override
-		public void mouseEntered(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+			/*for (VComponent vc : vcList) {
+				vc.mouseEntered(e);
+				}*/
+		}
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {}

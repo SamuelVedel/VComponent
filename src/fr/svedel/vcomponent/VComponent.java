@@ -259,18 +259,17 @@ public abstract class VComponent
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		mouseIn = true;
-		for (MouseListener ml : mouseLs) {
-			ml.mouseEntered(e);
+		if (!mouseIn && isCoorIn(e.getX(), e.getY())) {
+			mouseIn = true;
+			for (MouseListener ml : mouseLs) {
+				ml.mouseEntered(e);
+			}
 		}
 	}
 	
 	@Override
 	public void mouseExited(MouseEvent e) {
-		mouseIn = false;
-		for (MouseListener ml : mouseLs) {
-			ml.mouseExited(e);
-		}
+		hardMouseExited(e);
 	}
 	
 	// MouseMotionListener
@@ -294,17 +293,49 @@ public abstract class VComponent
 		}
 	}
 	
+	public void hardMouseExited(MouseEvent e) {
+		if (mouseIn) {
+			mouseIn = false;
+			for (MouseListener ml : mouseLs) {
+				ml.mouseExited(e);
+			}
+		}
+	}
+	
+	public void softMouseExited(MouseEvent e) {
+		if (mouseIn && !isCoorIn(e.getX(), e.getY())) {
+			mouseIn = false;
+			for (MouseListener ml : mouseLs) {
+				ml.mouseExited(e);
+			}
+		}
+	}
+	
+	/**
+	 * Check if the coordinates {@code x} and {@code y} are
+	 * in the component
+	 *
+	 * @param x point's abscissa
+	 * @param y point's ordinate
+	 * @return the boolean that describe if the point is in the component
+	 */
+	private boolean isCoorIn(int x, int y) {
+		return x > this.x.getCurrentValue()
+			&& x < this.x.getCurrentValue()+width.getCurrentValue()
+			&& y > this.y.getCurrentValue()
+			&& y < this.y.getCurrentValue()+height.getCurrentValue();
+	}
+	
 	private void checkForEnteredAndExited(MouseEvent e) {
-		if (e.getX() > x.getCurrentValue()
-			&& e.getX() < x.getCurrentValue()+width.getCurrentValue()
-			&& e.getY() > y.getCurrentValue()
-			&& e.getY() < y.getCurrentValue()+height.getCurrentValue()) {
+		/*if (isCoorIn(e.getX(), e.getY())) {
 			if (!mouseIn) {
 				mouseEntered(e);
 			}
 		} else if (mouseIn) {
 			mouseExited(e);
-		}
+			}*/
+		mouseEntered(e);
+		softMouseExited(e);
 	}
 	// fin des fonctions des listeners ------
 	
@@ -364,7 +395,7 @@ public abstract class VComponent
 			break;
 		case ADJUSTMENT_BY_WIDTH :
 			width.adjust(widthReference);
-			height.adjust(widthReference);;
+			height.adjust(widthReference);
 			
 			x.adjust(widthReference);
 			if (autoAlignment == NO_ALIGNMENT) {
@@ -373,9 +404,10 @@ public abstract class VComponent
 				y.adjust(y.getValue()+height.getValue()/2, heightReference);
 				y.setCurrentValue(y.getCurrentValue()-height.getCurrentValue()/2);
 			} else {
-				y.adjust(heightReference.getValue()-(y.getValue()+height.getValue()), widthReference);
-				y.setCurrentValue(heightReference.getCurrentValue()-y.getCurrentValue()-height.getCurrentValue());
-				//y[1] = heightReference[1]-widthReference[1]*(heightReference[0]-(y[0]+height[0]))/widthReference[0]-widthReference[1]*height[0]/widthReference[0];
+				y.adjust(heightReference.getValue()-(y.getValue()+height.getValue()),
+						 widthReference);
+				y.setCurrentValue(heightReference.getCurrentValue()
+								  -y.getCurrentValue()-height.getCurrentValue());
 			}
 			break;
 		case ADJUSTMENT_BY_HEIGHT :
@@ -387,18 +419,18 @@ public abstract class VComponent
 			} else if (autoAlignment == CENTER_ALIGNMENT) {
 				x.adjust(x.getValue()+width.getValue()/2, widthReference);
 				x.setCurrentValue(x.getCurrentValue()-width.getCurrentValue()/2);
-				//x[1] = widthReference[1]*(x[0]+width[0]/2)/widthReference[0]-width[1]/2;
 			} else if (autoAlignment == BOTTOM_ALIGNMENT) {
-				x.adjust(widthReference.getValue()-(x.getValue()+width.getValue()), heightReference);
-				x.setCurrentValue(widthReference.getCurrentValue()-x.getCurrentValue()-width.getCurrentValue());
-				//x[1] = widthReference[1]-heightReference[1]*(widthReference[0]-(x[0]+width[0]))/heightReference[0]-heightReference[1]*width[0]/heightReference[0];
+				x.adjust(widthReference.getValue()-(x.getValue()+width.getValue()),
+						 heightReference);
+				x.setCurrentValue(widthReference.getCurrentValue()
+								  -x.getCurrentValue()-width.getCurrentValue());
 			}
 			y.adjust(heightReference);
 			break;
 		case ADJUSTMENT_BY_THE_SMALLEST :
-			//if (widthReference[0]*width[0]/widthReference[1] >= heightReference[0]*width[0]/heightReference[1]) {
 			if (widthReference.getValue()*width.getValue()/widthReference.getCurrentValue()
-				>= heightReference.getValue()*width.getValue()/heightReference.getCurrentValue()) {
+				>= heightReference.getValue()
+				   *width.getValue()/heightReference.getCurrentValue()) {
 				autoAdjustment = ADJUSTMENT_BY_WIDTH;
 				adjust(widthRefrence, heightRefrence);
 			} else {
