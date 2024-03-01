@@ -137,7 +137,7 @@ public class Test {
 			vss[i] = new VSwitch(vsGap, vsGap+i*(vsGap+vsH), vsH);
 			vp2.add(vss[i]);
 		}
-		vss[0].addMouseListener(new MouseListener() {
+		MouseListener heyMl = new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -163,7 +163,9 @@ public class Test {
 			public void mouseClicked(MouseEvent e) {
 				
 			}
-		});
+		};
+		vss[0].addMouseListener(heyMl);
+		vss[1].addMouseListener(heyMl);
 		vsp.setVPanel(vp2);
 		vp.add(vsp);
 	}

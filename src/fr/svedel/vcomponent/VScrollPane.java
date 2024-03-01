@@ -171,11 +171,12 @@ public class VScrollPane extends VComponent {
 		return yScrollWidth;
 	}
 	
-	public int getXScrollLength() {
+	public int getXScrollBarLength() {
 		if (getXScrollDisplay() != X_SCROLL_ALWAYS
 			|| vp == null) {
 			return 0;
 		}
+		
 		int currentWidth = getWidth().getCurrentValue();
 		int currentVPWidth = vp.getWidth().getCurrentValue();
 		if (currentWidth >= currentVPWidth)
@@ -183,7 +184,12 @@ public class VScrollPane extends VComponent {
 		return currentWidth*currentWidth/currentVPWidth;
 	}
 	
-	public int[] getXScrollCoordinates() {
+	public int[] getXScrollBarCoordinates() {
+		if (getXScrollDisplay() != X_SCROLL_ALWAYS
+			|| vp == null) {
+			return new int[] {0, 0};
+		}
+		
 		int currentX = getX().getCurrentValue();
 		int currentY = getY().getCurrentValue();
 		int currentWidth = getWidth().getCurrentValue();
@@ -194,10 +200,39 @@ public class VScrollPane extends VComponent {
 		return new int[] {x, y};
 	}
 	
-	public int getYScrollLength() {
-		if (getYScrollDisplay() != Y_SCROLL_ALWAYS
-			|| vp == null)
+	public int getXScrollRailLength() {
+		if (getXScrollDisplay() != X_SCROLL_ALWAYS
+			|| vp == null) {
 			return 0;
+		}
+		
+		if (getYScrollDisplay() == Y_SCROLL_ALWAYS) {
+			return getWidth().getCurrentValue()
+				-yScrollWidth.getCurrentValue();
+		} else {
+			return getWidth().getCurrentValue();
+		}
+	}
+	
+	public int[] getXScrollRailCoordinates() {
+		if (getXScrollDisplay() != X_SCROLL_ALWAYS
+			|| vp == null) {
+			return new int[] {0, 0};
+		}
+		
+		return new int[] {
+			getX().getCurrentValue(),
+			getY().getCurrentValue()+getHeight().getCurrentValue()
+			-xScrollWidth.getCurrentValue()
+		};
+	}
+	
+	public int getYScrollBarLength() {
+		if (getYScrollDisplay() != Y_SCROLL_ALWAYS
+			|| vp == null) {
+			return 0;
+		}
+		
 		int currentHeight = getHeight().getCurrentValue();
 		int currentVPHeight = vp.getHeight().getCurrentValue();
 		if (currentHeight >= currentVPHeight)
@@ -205,7 +240,12 @@ public class VScrollPane extends VComponent {
 		return currentHeight*currentHeight/currentVPHeight;
 	}
 	
-	public int[] getYScrollCoordinates() {
+	public int[] getYScrollBarCoordinates() {
+		if (getYScrollDisplay() != Y_SCROLL_ALWAYS
+			|| vp == null) {
+			return new int[] {0, 0};
+		}
+		
 		int currentX = getX().getCurrentValue();
 		int currentY = getY().getCurrentValue();
 		int currentHeight = getHeight().getCurrentValue();
@@ -214,6 +254,33 @@ public class VScrollPane extends VComponent {
 		int x = currentX+getWidth().getCurrentValue()-getYScrollWidth().getCurrentValue();
 		int y = currentY+yScroll*currentHeight/currentVPHeight;
 		return new int[] {x, y};
+	}
+	
+	public int getYScrollRailLength() {
+		if (getYScrollDisplay() != Y_SCROLL_ALWAYS
+			|| vp == null) {
+			return 0;
+		}
+		
+		if (getXScrollDisplay() == X_SCROLL_ALWAYS) {
+			return getHeight().getCurrentValue()
+				-xScrollWidth.getCurrentValue();
+		} else {
+			return getHeight().getCurrentValue();
+		}
+	}
+	
+	public int[] getYScrollRailCoordinates() {
+		if (getYScrollDisplay() != Y_SCROLL_ALWAYS
+			|| vp == null) {
+			return new int[] {0, 0};
+		}
+		
+		return new int[] {
+			getX().getCurrentValue()+getWidth().getCurrentValue()
+			-yScrollWidth.getCurrentValue(),
+			getY().getCurrentValue()
+		};
 	}
 	
 	private boolean isMouseInScrollBar(int mouseX, int mouseY) {
@@ -226,8 +293,20 @@ public class VScrollPane extends VComponent {
 	@Override
 	public void adjust(int widthRefrence, int heightRefrence) {
 		super.adjust(widthRefrence, heightRefrence);
-		adjustValue(xScrollWidth);
-		adjustValue(yScrollWidth);
+		
+		// ajustement des dimension de scrolling
+		if (getXScrollDisplay() == X_SCROLL_ALWAYS) {
+			adjustValue(xScrollWidth);
+		} else {
+			xScrollWidth.setCurrentValue(0);
+		}
+		if (getYScrollDisplay() == Y_SCROLL_ALWAYS) {
+			adjustValue(yScrollWidth);
+		} else {
+			yScrollWidth.setCurrentValue(0);
+		}
+		
+		// positionnement et ajustement du VPanel
 		vp.getX().setValue(getX().getValue()+xScroll);
 		vp.getY().setValue(getY().getValue()+yScroll);
 		vp.adjust(getWidth().getCurrentValue(),
@@ -254,24 +333,39 @@ public class VScrollPane extends VComponent {
 			g2dBi.dispose();
 			
 			if (getXScrollDisplay() == X_SCROLL_ALWAYS) {
-				int currentXsWidth = getXScrollWidth().getCurrentValue();
-				int currentXsLength = getXScrollLength();
-				int[] xsCoor = getXScrollCoordinates();
+				int currentXSWidth = getXScrollWidth().getCurrentValue();
+				int currentXSBLength = getXScrollBarLength();
+				int[] xSBCoor = getXScrollBarCoordinates();
+				int currentXSRLength = getXScrollRailLength();
+				int[] xSRCoor = getXScrollRailCoordinates();
+				
 				g2d.setColor(Color.LIGHT_GRAY);
-				g2d.fillRect(currentX, currentY+currentHeight-currentXsWidth,
-							 currentWidth, currentXsWidth);
+				g2d.fillRect(xSRCoor[0], xSRCoor[1],
+							 currentXSRLength, currentXSWidth);
 				g2d.setColor(Color.DARK_GRAY);
-				g2d.fillRect(xsCoor[0], xsCoor[1], currentXsLength, currentXsWidth);
+				g2d.fillRect(xSBCoor[0], xSBCoor[1], currentXSBLength, currentXSWidth);
 			}
 			if (getYScrollDisplay() == Y_SCROLL_ALWAYS) {
-				int currentYsWidth = getYScrollWidth().getCurrentValue();
-				int currentYsLength = getYScrollLength();
-				int[] ysCoor = getYScrollCoordinates();
+				int currentYSWidth = getYScrollWidth().getCurrentValue();
+				int currentYSBLength = getYScrollBarLength();
+				int[] ySBCoor = getYScrollBarCoordinates();
+				int currentYSRLength = getYScrollRailLength();
+				int[] ySRCoor = getYScrollRailCoordinates();
+				
 				g2d.setColor(Color.LIGHT_GRAY);
-				g2d.fillRect(currentX+currentWidth-currentYsWidth, currentY,
-							 currentYsWidth, currentHeight);
+				g2d.fillRect(ySRCoor[0], ySRCoor[1],
+							 currentYSWidth, currentYSRLength);
 				g2d.setColor(Color.DARK_GRAY);
-				g2d.fillRect(ysCoor[0], ysCoor[1], currentYsWidth, currentYsLength);
+				g2d.fillRect(ySBCoor[0], ySBCoor[1], currentYSWidth, currentYSBLength);
+			}
+			if (getXScrollDisplay() == X_SCROLL_ALWAYS
+				&& getYScrollDisplay() == Y_SCROLL_ALWAYS) {
+				int currentXSWidth = getXScrollWidth().getCurrentValue();
+				int currentYSWidth = getYScrollWidth().getCurrentValue();
+				g2d.setColor(Color.DARK_GRAY);
+				g2d.fillRect(currentX+currentWidth-currentXSWidth,
+							 currentY+currentHeight-currentYSWidth,
+							 currentXSWidth, currentYSWidth);
 			}
 		}
 	}
