@@ -11,17 +11,17 @@ JCFLAGS := -encoding iso-8859-1 -d $(OUT_DIR)/ -cp $(SRC_DIR)/
 
 .PHONY: all project clean
 
-all: done
+all: .done
 	java -cp $(OUT_DIR) tst.vcomponent.MainTestVc
 
 %.class: %.java
 	$(JC) $(JCFLAGS) $?
 
-done: $(SRCS)
+.done: $(SRCS)
 	$(JC) $(JCFLAGS) $?
-	touch done
+	touch .done
 
 clean:
 	rm -rf $(OUT_DIR)
-	rm -f done
+	rm -f .done
 	rm -f *~ $(SRC_DIR)/*/*/*/*~ $(SRC_DIR)/*/*/*/*/*~ $(SRC_DIR)/*/*/*/*/*/*~
