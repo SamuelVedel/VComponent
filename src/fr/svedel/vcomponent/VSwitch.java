@@ -104,57 +104,62 @@ public class VSwitch extends VAbstractButton {
 	
 	@Override
 	public void display(Graphics2D g2d2) {
+		int currentX = getX().getCurrentValue();
+		int currentY = getY().getCurrentValue();
+		int currentWidth = getWidth().getCurrentValue();
+		int currentHeight = getHeight().getCurrentValue();
+		
 		Graphics2D g2d = (Graphics2D) g2d2.create();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+							 RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		// border width
-		int bWidth = (int)(getHeight().getCurrentValue()*borderWidth);
+		int bWidth = (int)(currentHeight*borderWidth);
 		g2d.setColor(on? onColor: offColor);
 		if (isRounded()) {
-			g2d.fillRoundRect(getX().getCurrentValue(), getY().getCurrentValue(),
-							  getWidth().getCurrentValue(), getHeight().getCurrentValue(),
-							  getHeight().getCurrentValue(), getHeight().getCurrentValue());
+			g2d.fillRoundRect(currentX, currentY, currentWidth, currentHeight,
+							  currentHeight, currentHeight);
 		} else {
-			g2d.fillRect(getX().getCurrentValue(), getY().getCurrentValue(),
-						 getWidth().getCurrentValue(), getHeight().getCurrentValue());
+			g2d.fillRect(currentX, currentY,
+						 currentWidth, currentHeight);
 		}
 		
 		g2d.setColor(background);
 		if (isRounded()) {
-		g2d.fillRoundRect(getX().getCurrentValue()+bWidth, getY().getCurrentValue()+bWidth,
-						  getWidth().getCurrentValue()-bWidth*2, getHeight().getCurrentValue()-bWidth*2,
-						  getHeight().getCurrentValue()-bWidth*2, getHeight().getCurrentValue()-bWidth*2);
+		g2d.fillRoundRect(currentX+bWidth, currentY+bWidth, currentWidth-bWidth*2,
+						  currentHeight-bWidth*2, currentHeight-bWidth*2,
+						  currentHeight-bWidth*2);
 		} else {
-			g2d.fillRect(getX().getCurrentValue()+bWidth, getY().getCurrentValue()+bWidth,
-						 getWidth().getCurrentValue()-bWidth*2, getHeight().getCurrentValue()-bWidth*2);
+			g2d.fillRect(currentX+bWidth, currentY+bWidth,
+						 currentWidth-bWidth*2, currentHeight-bWidth*2);
 		}
 		
 		// affichage du 0
 		g2d.setColor(foreground);
-		int d0 = (int)(getHeight().getCurrentValue()*dOf0);
-		int d20 = (int)(getHeight().getCurrentValue()*d2Of0);
-		g2d.fillOval(getX().getCurrentValue()+getWidth().getCurrentValue()*3/4-d0/2,
-					 getY().getCurrentValue()+getHeight().getCurrentValue()/2-d0/2, d0, d0);
+		int d0 = (int)(currentHeight*dOf0);
+		int d20 = (int)(currentHeight*d2Of0);
+		g2d.fillOval(currentX+currentWidth*3/4-d0/2,
+					 currentY+currentHeight/2-d0/2, d0, d0);
 		g2d.setColor(background);
-		g2d.fillOval(getX().getCurrentValue()+getWidth().getCurrentValue()*3/4-d20/2,
-					 getY().getCurrentValue()+getHeight().getCurrentValue()/2-d20/2, d20, d20);
+		g2d.fillOval(currentX+currentWidth*3/4-d20/2,
+					 currentY+currentHeight/2-d20/2, d20, d20);
 		// affichage du 1
-		int w1 = (int)(getHeight().getCurrentValue()*wOf1);
-		int h1 = (int)(getHeight().getCurrentValue()*hOf1);
+		int w1 = (int)(currentHeight*wOf1);
+		int h1 = (int)(currentHeight*hOf1);
 		g2d.setColor(foreground);
-		g2d.fillRect(getX().getCurrentValue()+getWidth().getCurrentValue()*1/5-w1/2,
-					 getY().getCurrentValue()+getHeight().getCurrentValue()/2-h1/2, w1, h1);
+		g2d.fillRect(currentX+currentWidth*1/5-w1/2,
+					 currentY+currentHeight/2-h1/2, w1, h1);
 		
 		// affichage du cercle
 		g2d.setColor(on? onColor: offColor);
-		int d = (int)(getHeight().getCurrentValue()*roundD);
-		int gap = (getHeight().getCurrentValue()-d)/2;
+		int d = (int)(currentHeight*roundD);
+		int gap = (currentHeight-d)/2;
 		if (isRounded()) {
-			g2d.fillOval((int)(getX().getCurrentValue()+gap+(getWidth().getCurrentValue()-2*gap-d)*((double)perOfRoundX/100)),
-					 getY().getCurrentValue()+gap, d, d);
+			g2d.fillOval((int)(currentX+gap+(currentWidth-2*gap-d)*((double)perOfRoundX/100)),
+					 currentY+gap, d, d);
 		} else {
-			g2d.fillRect((int)(getX().getCurrentValue()+gap+(getWidth().getCurrentValue()-2*gap-d)*((double)perOfRoundX/100)),
-						 getY().getCurrentValue()+gap, d, d);
+			g2d.fillRect((int)(currentX+gap+(currentWidth-2*gap-d)*((double)perOfRoundX/100)),
+						 currentY+gap, d, d);
 		}
 		
 		moveRound();
