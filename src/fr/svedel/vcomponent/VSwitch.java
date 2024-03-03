@@ -52,7 +52,7 @@ public class VSwitch extends VAbstractButton {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (isUsable()) {
-				on = !on;
+				if (e.getButton() == 1) on = !on;
 				executeVActLs(e);
 			}
 		}

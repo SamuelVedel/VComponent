@@ -32,7 +32,8 @@ public abstract class VAbstractButton extends VComponent {
 		}
 	};
 	
-	public VAbstractButton(int x, int y, int w, int h, int widthReference, int heightReference) {
+	public VAbstractButton(int x, int y, int w, int h,
+						   int widthReference, int heightReference) {
 		super(x, y, w, h, widthReference, heightReference);
 		addMouseListener(ml);
 	}

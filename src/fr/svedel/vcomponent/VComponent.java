@@ -6,10 +6,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
 public abstract class VComponent
-	implements KeyListener, MouseListener, MouseMotionListener {
+	implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
 	public static final int NO_ADJUSTMENT = 0;
 	public static final int ADJUSTMENT_BY_WIDTH_AND_HEIGHT = 1;
@@ -42,6 +44,7 @@ public abstract class VComponent
 	private ArrayList<KeyListener> keyLs = new ArrayList<>();
 	private ArrayList<MouseListener> mouseLs = new ArrayList<>();
 	private ArrayList<MouseMotionListener> mouseMotionLs = new ArrayList<>();
+	private ArrayList<MouseWheelListener> mouseWheelLs = new ArrayList<>();
 	
 	private boolean focus = false;
 	private boolean focusable = true;
@@ -129,7 +132,7 @@ public abstract class VComponent
 		}
 	}
 	
-	public void removeAllKeyListener() {
+	public void removeAllKeyListeners() {
 		keyLs.removeAll(keyLs);
 	}
 	
@@ -145,7 +148,7 @@ public abstract class VComponent
 		}
 	}
 	
-	public void removeAllMouseListener() {
+	public void removeAllMouseListeners() {
 		mouseLs.removeAll(mouseLs);
 	}
 	
@@ -161,8 +164,24 @@ public abstract class VComponent
 		}
 	}
 	
-	public void removeAllMouseMotionListener() {
+	public void removeAllMouseMotionListeners() {
 		mouseMotionLs.removeAll(mouseMotionLs);
+	}
+	
+	public void addMouseWheelListener(MouseWheelListener mwl) {
+		mouseWheelLs.add(mwl);
+	}
+	
+	public void removeMouseWheelListener(MouseWheelListener mwl) {
+		for (int i = mouseWheelLs.size()-1; i >= 0; i--) {
+			if (mouseWheelLs.get(i) == mwl) {
+				mouseWheelLs.remove(i);
+			}
+		}
+	}
+	
+	public void removeAllMouseWheelListener() {
+		mouseWheelLs.removeAll(mouseWheelLs);
 	}
 	
 	public boolean hasFocus() {
@@ -337,6 +356,17 @@ public abstract class VComponent
 		mouseEntered(e);
 		softMouseExited(e);
 	}
+	
+	// MouseWheelListener
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		if (mouseIn) {
+			for (int i = 0; i < mouseWheelLs.size(); ++i) {
+				mouseWheelLs.get(i).mouseWheelMoved(e);
+			}
+		}
+	}
+	
 	// fin des fonctions des listeners ------
 	
 	public void adjustValue(VAdjustInt value, boolean preferenceForWidth) {

@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 
 public class VScrollPane extends VComponent {
@@ -20,6 +22,7 @@ public class VScrollPane extends VComponent {
 	private VAdjustInt yScroll = new VAdjustInt(0);
 	private int yScrollWhenPressed;
 	private int[] mouseCoorWhenPressed = new int[2];
+	private int scrollIntensity = 10;
 	
 	private int defaultScrollWidth = 10;
 	private VAdjustInt xScrollWidth = new VAdjustInt(defaultScrollWidth);
@@ -103,41 +106,55 @@ public class VScrollPane extends VComponent {
 			}
 		}
 	};
+	private MouseWheelListener mwl = new MouseWheelListener() {
+		
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			if (!isMouseInScrollBar(e.getX(), e.getY())
+				&& vp != null) {
+				vp.mouseWheelMoved(e);
+			}
+		}
+	};
 	
 	private MouseListener scrollMl = new MouseListener() {
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if (!xScrollPressed) {
-				int currentXSWidth = getXScrollWidth().getCurrentValue();
-				int currentXSBLength = getXScrollBarLength();
-				int[] xSBCoor = getXScrollBarCoordinates();
-				if (e.getX() > xSBCoor[0] && e.getX() < xSBCoor[0]+currentXSBLength
-					&& e.getY() > xSBCoor[1] && e.getX() < xSBCoor[1]+currentXSWidth) {
-					xScrollPressed = true;
-					mouseCoorWhenPressed[0] = e.getX();
-					mouseCoorWhenPressed[1] = e.getY();
-					xScrollWhenPressed = xScroll.getCurrentValue();
+			if (e.getButton() == 1) {
+				if (!xScrollPressed) {
+					int currentXSWidth = getXScrollWidth().getCurrentValue();
+					int currentXSBLength = getXScrollBarLength();
+					int[] xSBCoor = getXScrollBarCoordinates();
+					if (e.getX() > xSBCoor[0] && e.getX() < xSBCoor[0]+currentXSBLength
+						&& e.getY() > xSBCoor[1] && e.getX() < xSBCoor[1]+currentXSWidth) {
+						xScrollPressed = true;
+						mouseCoorWhenPressed[0] = e.getX();
+						mouseCoorWhenPressed[1] = e.getY();
+						xScrollWhenPressed = xScroll.getCurrentValue();
+					}
 				}
-			}
-			if (!yScrollPressed) {
-				int currentYSWidth = getYScrollWidth().getCurrentValue();
-				int currentYSBLength = getYScrollBarLength();
-				int[] ySBCoor = getYScrollBarCoordinates();
-				if (e.getX() > ySBCoor[0] && e.getX() < ySBCoor[0]+currentYSWidth
-					&& e.getY() > ySBCoor[1] && e.getY() < ySBCoor[1]+currentYSBLength) {
-					yScrollPressed = true;
-					mouseCoorWhenPressed[0] = e.getX();
-					mouseCoorWhenPressed[1] = e.getY();
-					yScrollWhenPressed = yScroll.getCurrentValue();
+				if (!yScrollPressed) {
+					int currentYSWidth = getYScrollWidth().getCurrentValue();
+					int currentYSBLength = getYScrollBarLength();
+					int[] ySBCoor = getYScrollBarCoordinates();
+					if (e.getX() > ySBCoor[0] && e.getX() < ySBCoor[0]+currentYSWidth
+						&& e.getY() > ySBCoor[1] && e.getY() < ySBCoor[1]+currentYSBLength) {
+						yScrollPressed = true;
+						mouseCoorWhenPressed[0] = e.getX();
+						mouseCoorWhenPressed[1] = e.getY();
+						yScrollWhenPressed = yScroll.getCurrentValue();
+					}
 				}
 			}
 		}
 		
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			if (xScrollPressed) xScrollPressed = false;
-			if (yScrollPressed) yScrollPressed = false;
+			if (e.getButton() == 1) {
+				if (xScrollPressed) xScrollPressed = false;
+				if (yScrollPressed) yScrollPressed = false;
+			}
 		}
 		
 		@Override
@@ -149,7 +166,6 @@ public class VScrollPane extends VComponent {
 		@Override
 		public void mouseClicked(MouseEvent e) {}
 	};
-	
 	private MouseMotionListener scrollMml = new MouseMotionListener() {
 		
 		@Override
@@ -191,6 +207,27 @@ public class VScrollPane extends VComponent {
 			}
 		}
 	};
+	private MouseWheelListener scrollMwl = new MouseWheelListener() {
+		
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			if (getYScrollDisplay() == Y_SCROLL_ALWAYS) {
+				int height = getHeight().getValue();
+				int vpHeight = vp.getHeight().getValue();
+				
+				yScroll.setValue(yScroll.getValue()+e.getWheelRotation()*scrollIntensity);
+				if (yScroll.getValue() < 0) yScroll.setValue(0);
+				if (yScroll.getValue() > vpHeight-height) yScroll.setValue(vpHeight-height);
+			} else if (getXScrollDisplay() == X_SCROLL_ALWAYS) {
+				int width = getWidth().getValue();
+				int vpWidth = vp.getWidth().getValue();
+				
+				xScroll.setValue(xScroll.getValue()+e.getWheelRotation()*scrollIntensity);
+				if (xScroll.getValue() < 0) xScroll.setValue(0);
+				if (xScroll.getValue() > vpWidth-width) xScroll.setValue(vpWidth-width);
+			}
+		}
+	};
 	
 	public VScrollPane(int x, int y, int w, int h, int widthReference,
 					   int heightReference, VPanel vp) {
@@ -215,8 +252,10 @@ public class VScrollPane extends VComponent {
 		addKeyListener(kl);
 		addMouseListener(ml);
 		addMouseMotionListener(mml);
+		addMouseWheelListener(mwl);
 		addMouseListener(scrollMl);
 		addMouseMotionListener(scrollMml);
+		addMouseWheelListener(scrollMwl);
 	}
 	
 	public VPanel getVPanel() {
@@ -248,6 +287,14 @@ public class VScrollPane extends VComponent {
 	
 	public void setYScrollDisplay(int display) {
 		yScrollDisplay = display;
+	}
+	
+	public int getScrollIntensity() {
+		return scrollIntensity;
+	}
+	
+	public void setScrollIntensity(int intensity) {
+		scrollIntensity = intensity;
 	}
 	
 	public int getDefaultScrollWidth() {

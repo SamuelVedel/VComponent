@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
 public class VPanel extends VComponent {
@@ -91,6 +93,15 @@ public class VPanel extends VComponent {
 			}
 		}
 	};
+	private MouseWheelListener mwl = new MouseWheelListener() {
+		
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			for (int i = 0; i < vcList.size(); ++i) {
+				vcList.get(i).mouseWheelMoved(e);
+			}
+		}
+	};
 	
 	public VPanel(int x, int y, int w, int h, int widthReference, int heightReference) {
 		super(x, y, w, h, widthReference, heightReference);
@@ -105,6 +116,7 @@ public class VPanel extends VComponent {
 		addKeyListener(kl);
 		addMouseListener(ml);
 		addMouseMotionListener(mml);
+		addMouseWheelListener(mwl);
 	}
 	
 //	public void addListenersToAJPanel(JPanel jp) {
@@ -136,6 +148,14 @@ public class VPanel extends VComponent {
 	
 	public void removeKlToAComponent(Component c) {
 		c.removeKeyListener(this);
+	}
+	
+	public void addMwlToAComponent(Component c) {
+		c.addMouseWheelListener(this);
+	}
+	
+	public void removeMwlToAComponent(Component c) {
+		c.removeMouseWheelListener(this);
 	}
 	
 	public void add(VComponent vc) {

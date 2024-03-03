@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -94,6 +96,7 @@ public class Test {
 		vp.addMlToAComponent(paint);
 		vp.addMmlToAComponent(paint);
 		vp.addKlToAComponent(jf);
+		vp.addMwlToAComponent(paint);
 		vb.setText("hey");
 		vb.addVActionListener(vActL);
 		vs.addVActionListener(vActL);
@@ -164,9 +167,18 @@ public class Test {
 				
 			}
 		};
+		MouseWheelListener heyMwl = new MouseWheelListener() {
+			
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				System.out.println(e.getWheelRotation());
+			}
+		};
 		//vss[0].addMouseListener(heyMl);
 		//vss[1].addMouseListener(heyMl);
+		//vss[0].addMouseWheelListener(heyMwl);
 		vsp.setVPanel(vp2);
+		//vsp.setScrollIntensity(100);
 		//vsp.setYScrollDisplay(VScrollPane.Y_SCROLL_NEVER);
 		vp.add(vsp);
 	}
