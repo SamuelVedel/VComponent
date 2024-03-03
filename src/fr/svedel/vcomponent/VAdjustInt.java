@@ -61,4 +61,12 @@ public class VAdjustInt {
 	public void adjust(VAdjustInt reference) {
 		adjust(getValue(), reference);
 	}
+	
+	public void reverseAdjust(int currentValue, VAdjustInt reference) {
+		setValue(reference.getValue()*currentValue/reference.getCurrentValue());
+	}
+	
+	public void reverseAdjust(VAdjustInt reference) {
+		reverseAdjust(getCurrentValue(), reference);
+	}
 }

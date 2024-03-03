@@ -164,9 +164,10 @@ public class Test {
 				
 			}
 		};
-		vss[0].addMouseListener(heyMl);
-		vss[1].addMouseListener(heyMl);
+		//vss[0].addMouseListener(heyMl);
+		//vss[1].addMouseListener(heyMl);
 		vsp.setVPanel(vp2);
+		//vsp.setYScrollDisplay(VScrollPane.Y_SCROLL_NEVER);
 		vp.add(vsp);
 	}
 	

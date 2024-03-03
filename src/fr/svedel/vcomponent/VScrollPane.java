@@ -13,8 +13,13 @@ public class VScrollPane extends VComponent {
 	
 	private VPanel vp;
 	
-	private int xScroll = 0;
-	private int yScroll = 0;
+	private boolean xScrollPressed = false;
+	private VAdjustInt xScroll = new VAdjustInt(0);
+	private int xScrollWhenPressed;
+	private boolean yScrollPressed = false;
+	private VAdjustInt yScroll = new VAdjustInt(0);
+	private int yScrollWhenPressed;
+	private int[] mouseCoorWhenPressed = new int[2];
 	
 	private int defaultScrollWidth = 10;
 	private VAdjustInt xScrollWidth = new VAdjustInt(defaultScrollWidth);
@@ -99,6 +104,94 @@ public class VScrollPane extends VComponent {
 		}
 	};
 	
+	private MouseListener scrollMl = new MouseListener() {
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (!xScrollPressed) {
+				int currentXSWidth = getXScrollWidth().getCurrentValue();
+				int currentXSBLength = getXScrollBarLength();
+				int[] xSBCoor = getXScrollBarCoordinates();
+				if (e.getX() > xSBCoor[0] && e.getX() < xSBCoor[0]+currentXSBLength
+					&& e.getY() > xSBCoor[1] && e.getX() < xSBCoor[1]+currentXSWidth) {
+					xScrollPressed = true;
+					mouseCoorWhenPressed[0] = e.getX();
+					mouseCoorWhenPressed[1] = e.getY();
+					xScrollWhenPressed = xScroll.getCurrentValue();
+				}
+			}
+			if (!yScrollPressed) {
+				int currentYSWidth = getYScrollWidth().getCurrentValue();
+				int currentYSBLength = getYScrollBarLength();
+				int[] ySBCoor = getYScrollBarCoordinates();
+				if (e.getX() > ySBCoor[0] && e.getX() < ySBCoor[0]+currentYSWidth
+					&& e.getY() > ySBCoor[1] && e.getY() < ySBCoor[1]+currentYSBLength) {
+					yScrollPressed = true;
+					mouseCoorWhenPressed[0] = e.getX();
+					mouseCoorWhenPressed[1] = e.getY();
+					yScrollWhenPressed = yScroll.getCurrentValue();
+				}
+			}
+		}
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (xScrollPressed) xScrollPressed = false;
+			if (yScrollPressed) yScrollPressed = false;
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent e) {}
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+	};
+	
+	private MouseMotionListener scrollMml = new MouseMotionListener() {
+		
+		@Override
+		public void mouseMoved(MouseEvent e) {}
+		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if (xScrollPressed) {
+				int currentXSBLength = getXScrollBarLength();
+				int currentXSRLength = getXScrollRailLength();
+				int currentWidth = getWidth().getCurrentValue();
+				int currentVpWidth = vp.getWidth().getCurrentValue();
+				int deltaMouseX = e.getX()-mouseCoorWhenPressed[0];
+				
+				xScroll.setCurrentValue(xScrollWhenPressed+deltaMouseX
+										*currentVpWidth/currentXSRLength);
+				if (xScroll.getCurrentValue() < 0) {
+					xScroll.setCurrentValue(0);
+				} else if (xScroll.getCurrentValue() > currentVpWidth-currentWidth) {
+					xScroll.setCurrentValue(currentVpWidth-currentWidth);
+				}
+				xScroll.reverseAdjust(getWidthReference());
+			}
+			if (yScrollPressed) {
+				int currentYSBLength = getYScrollBarLength();
+				int currentYSRLength = getYScrollRailLength();
+				int currentHeight = getHeight().getCurrentValue();
+				int currentVpHeight = vp.getHeight().getCurrentValue();
+				int deltaMouseY = e.getY()-mouseCoorWhenPressed[1];
+				
+				yScroll.setCurrentValue(yScrollWhenPressed+deltaMouseY
+										*currentVpHeight/currentYSRLength);
+				if (yScroll.getCurrentValue() < 0) {
+					yScroll.setCurrentValue(0);
+				} else if (yScroll.getCurrentValue() > currentVpHeight-currentHeight) {
+					yScroll.setCurrentValue(currentVpHeight-currentHeight);
+				}
+				yScroll.reverseAdjust(getWidthReference());
+			}
+		}
+	};
+	
 	public VScrollPane(int x, int y, int w, int h, int widthReference,
 					   int heightReference, VPanel vp) {
 		super(x, y, w, h, widthReference, heightReference);
@@ -122,6 +215,8 @@ public class VScrollPane extends VComponent {
 		addKeyListener(kl);
 		addMouseListener(ml);
 		addMouseMotionListener(mml);
+		addMouseListener(scrollMl);
+		addMouseMotionListener(scrollMml);
 	}
 	
 	public VPanel getVPanel() {
@@ -195,7 +290,7 @@ public class VScrollPane extends VComponent {
 		int currentWidth = getWidth().getCurrentValue();
 		int currentVPWidth = vp.getWidth().getCurrentValue();
 		
-		int x = currentX+xScroll*currentWidth/currentVPWidth;
+		int x = currentX+xScroll.getCurrentValue()*currentWidth/currentVPWidth;
 		int y = currentY+getHeight().getCurrentValue()-getXScrollWidth().getCurrentValue();
 		return new int[] {x, y};
 	}
@@ -252,7 +347,7 @@ public class VScrollPane extends VComponent {
 		int currentVPHeight = vp.getHeight().getCurrentValue();
 		
 		int x = currentX+getWidth().getCurrentValue()-getYScrollWidth().getCurrentValue();
-		int y = currentY+yScroll*currentHeight/currentVPHeight;
+		int y = currentY+yScroll.getCurrentValue()*currentHeight/currentVPHeight;
 		return new int[] {x, y};
 	}
 	
@@ -296,19 +391,21 @@ public class VScrollPane extends VComponent {
 		
 		// ajustement des dimension de scrolling
 		if (getXScrollDisplay() == X_SCROLL_ALWAYS) {
+			adjustValue(xScroll);
 			adjustValue(xScrollWidth);
 		} else {
 			xScrollWidth.setCurrentValue(0);
 		}
 		if (getYScrollDisplay() == Y_SCROLL_ALWAYS) {
+			adjustValue(yScroll);
 			adjustValue(yScrollWidth);
 		} else {
 			yScrollWidth.setCurrentValue(0);
 		}
 		
 		// positionnement et ajustement du VPanel
-		vp.getX().setValue(getX().getValue()+xScroll);
-		vp.getY().setValue(getY().getValue()+yScroll);
+		vp.getX().setValue(getX().getValue()-xScroll.getValue());
+		vp.getY().setValue(getY().getValue()-yScroll.getValue());
 		vp.adjust(getWidth().getCurrentValue(),
 				  getHeight().getCurrentValue());
 	}
@@ -327,7 +424,8 @@ public class VScrollPane extends VComponent {
 			BufferedImage bi = new BufferedImage(currentWidth, currentHeight,
 												 BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2dBi = bi.createGraphics();
-			g2dBi.translate(-currentX-xScroll, -currentY-yScroll);
+			g2dBi.translate(-currentX/*-xScroll.getCurrentValue()*/,
+							-currentY/*-yScroll.getCurrentValue()*/);
 			vp.display(g2dBi);
 			g2d.drawImage(bi, currentX, currentY, currentWidth, currentHeight, null);
 			g2dBi.dispose();
