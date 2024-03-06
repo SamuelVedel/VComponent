@@ -228,8 +228,8 @@ public class VScrollPane extends VComponent {
 				
 				xScroll.setValue(xScroll.getValue()+e.getWheelRotation()*scrollIntensity);
 				if (xScroll.getValue() < 0) xScroll.setValue(0);
-				else {
-					if (xScroll.getValue() > vpWidth-width) xScroll.setValue(vpWidth-width);
+				else if (xScroll.getValue() > vpWidth-width) {
+					xScroll.setValue(vpWidth-width);
 				}
 			}
 		}
@@ -434,10 +434,12 @@ public class VScrollPane extends VComponent {
 	}
 	
 	private boolean isMouseInScrollBar(int mouseX, int mouseY) {
-		return mouseX > getX().getCurrentValue()+
-			getWidth().getCurrentValue()-getXScrollWidth().getCurrentValue()
-			|| mouseY > getY().getCurrentValue()+
-			getHeight().getCurrentValue()-getYScrollWidth().getCurrentValue();
+		return (getYScrollDisplay() == Y_SCROLL_ALWAYS
+				&& mouseX > getX().getCurrentValue()+
+				getWidth().getCurrentValue()-getYScrollWidth().getCurrentValue())
+			|| (getXScrollDisplay() == X_SCROLL_ALWAYS
+				&& mouseY > getY().getCurrentValue()+
+				getHeight().getCurrentValue()-getXScrollWidth().getCurrentValue());
 	}
 	
 	@Override
