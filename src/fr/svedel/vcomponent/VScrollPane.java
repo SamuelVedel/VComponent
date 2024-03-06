@@ -174,6 +174,8 @@ public class VScrollPane extends VComponent {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (xScrollPressed) {
+				int width = getWidth().getValue();
+				int vpWidth = vp.getWidth().getValue();
 				int currentXSBLength = getXScrollBarLength();
 				int currentXSRLength = getXScrollRailLength();
 				int currentWidth = getWidth().getCurrentValue();
@@ -182,14 +184,15 @@ public class VScrollPane extends VComponent {
 				
 				xScroll.setCurrentValue(xScrollWhenPressed+deltaMouseX
 										*currentVpWidth/currentXSRLength);
-				if (xScroll.getCurrentValue() < 0) {
-					xScroll.setCurrentValue(0);
-				} else if (xScroll.getCurrentValue() > currentVpWidth-currentWidth) {
-					xScroll.setCurrentValue(currentVpWidth-currentWidth);
-				}
 				xScroll.reverseAdjust(getWidthReference());
+				if (xScroll.getValue() < 0) xScroll.setValue(0);
+				else if (xScroll.getValue() > vpWidth-width) {
+					xScroll.setValue(vpWidth-width);
+				}
 			}
 			if (yScrollPressed) {
+				int height = getHeight().getValue();
+				int vpHeight = vp.getHeight().getValue();
 				int currentYSBLength = getYScrollBarLength();
 				int currentYSRLength = getYScrollRailLength();
 				int currentHeight = getHeight().getCurrentValue();
@@ -198,12 +201,11 @@ public class VScrollPane extends VComponent {
 				
 				yScroll.setCurrentValue(yScrollWhenPressed+deltaMouseY
 										*currentVpHeight/currentYSRLength);
-				if (yScroll.getCurrentValue() < 0) {
-					yScroll.setCurrentValue(0);
-				} else if (yScroll.getCurrentValue() > currentVpHeight-currentHeight) {
-					yScroll.setCurrentValue(currentVpHeight-currentHeight);
-				}
 				yScroll.reverseAdjust(getWidthReference());
+				if (yScroll.getValue() < 0) yScroll.setValue(0);
+				else if (yScroll.getValue() > vpHeight-height) {
+					yScroll.setValue(vpHeight-height);
+				}
 			}
 		}
 	};
@@ -217,14 +219,18 @@ public class VScrollPane extends VComponent {
 				
 				yScroll.setValue(yScroll.getValue()+e.getWheelRotation()*scrollIntensity);
 				if (yScroll.getValue() < 0) yScroll.setValue(0);
-				if (yScroll.getValue() > vpHeight-height) yScroll.setValue(vpHeight-height);
+				else if (yScroll.getValue() > vpHeight-height) {
+					yScroll.setValue(vpHeight-height);
+				}
 			} else if (getXScrollDisplay() == X_SCROLL_ALWAYS) {
 				int width = getWidth().getValue();
 				int vpWidth = vp.getWidth().getValue();
 				
 				xScroll.setValue(xScroll.getValue()+e.getWheelRotation()*scrollIntensity);
 				if (xScroll.getValue() < 0) xScroll.setValue(0);
-				if (xScroll.getValue() > vpWidth-width) xScroll.setValue(vpWidth-width);
+				else {
+					if (xScroll.getValue() > vpWidth-width) xScroll.setValue(vpWidth-width);
+				}
 			}
 		}
 	};
@@ -320,10 +326,11 @@ public class VScrollPane extends VComponent {
 		}
 		
 		int currentWidth = getWidth().getCurrentValue();
+		int currentXSRLength = getXScrollRailLength();
 		int currentVPWidth = vp.getWidth().getCurrentValue();
 		if (currentWidth >= currentVPWidth)
-			return currentWidth;
-		return currentWidth*currentWidth/currentVPWidth;
+			return currentXSRLength;
+		return currentWidth*currentXSRLength/currentVPWidth;
 	}
 	
 	public int[] getXScrollBarCoordinates() {
@@ -334,10 +341,10 @@ public class VScrollPane extends VComponent {
 		
 		int currentX = getX().getCurrentValue();
 		int currentY = getY().getCurrentValue();
-		int currentWidth = getWidth().getCurrentValue();
+		int currentXSRLength = getXScrollRailLength();
 		int currentVPWidth = vp.getWidth().getCurrentValue();
 		
-		int x = currentX+xScroll.getCurrentValue()*currentWidth/currentVPWidth;
+		int x = currentX+xScroll.getCurrentValue()*currentXSRLength/currentVPWidth;
 		int y = currentY+getHeight().getCurrentValue()-getXScrollWidth().getCurrentValue();
 		return new int[] {x, y};
 	}
@@ -377,9 +384,10 @@ public class VScrollPane extends VComponent {
 		
 		int currentHeight = getHeight().getCurrentValue();
 		int currentVPHeight = vp.getHeight().getCurrentValue();
+		int currentYSRLength = getYScrollRailLength();
 		if (currentHeight >= currentVPHeight)
 			return currentHeight;
-		return currentHeight*currentHeight/currentVPHeight;
+		return currentHeight*currentYSRLength/currentVPHeight;
 	}
 	
 	public int[] getYScrollBarCoordinates() {
@@ -390,11 +398,11 @@ public class VScrollPane extends VComponent {
 		
 		int currentX = getX().getCurrentValue();
 		int currentY = getY().getCurrentValue();
-		int currentHeight = getHeight().getCurrentValue();
+		int currentYSRLength = getYScrollRailLength();
 		int currentVPHeight = vp.getHeight().getCurrentValue();
 		
 		int x = currentX+getWidth().getCurrentValue()-getYScrollWidth().getCurrentValue();
-		int y = currentY+yScroll.getCurrentValue()*currentHeight/currentVPHeight;
+		int y = currentY+yScroll.getCurrentValue()*currentYSRLength/currentVPHeight;
 		return new int[] {x, y};
 	}
 	

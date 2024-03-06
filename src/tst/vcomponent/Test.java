@@ -180,6 +180,7 @@ public class Test {
 		vsp.setVPanel(vp2);
 		//vsp.setScrollIntensity(100);
 		//vsp.setYScrollDisplay(VScrollPane.Y_SCROLL_NEVER);
+		vsp.setXScrollDisplay(VScrollPane.X_SCROLL_NEVER);
 		vp.add(vsp);
 	}
 	
