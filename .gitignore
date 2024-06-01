@@ -4,4 +4,6 @@
 bin/*
 *.class
 .done
+.done_tst
 *~
+*.jar
