@@ -16,7 +16,7 @@ And finaly you install the compiled code with
 ```shell
 INSTALL_PATH=<path> make install
 ```
-where `<path>` is replaced by the place where you want to install the library, be careful the path need to end at an **existing** directory.
+where `<path>` is replaced by the place where you want to install the library, be careful the path need to end at an **existing** directory. If the pass is `~/javalibs/vcomponent` you can just use the command `make install`.
 
 You can also create an jar file with the command
 ```shell
