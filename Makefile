@@ -11,6 +11,7 @@ JCFLAGS := -encoding iso-8859-1 -d $(OUT_DIR)/ -cp $(SRC_DIR)/
 JCFLAGS_TST := -encoding iso-8859-1 -d $(OUT_DIR_TST)/ -cp $(SRC_DIR)/
 
 JAR_FILE = vcomponent.jar
+INSTALL_PATH ?= $(HOME)/javalibs/vcomponent
 
 .SUFFIXES: .java .class
 
@@ -21,6 +22,9 @@ all: build build_tst run_tst
 build: .done
 
 build_tst: .done_tst
+
+install: .done
+	cp -r $(OUT_DIR)/* $(INSTALL_PATH)
 
 run_tst:
 	java -cp $(OUT_DIR_TST) tst.vcomponent.MainTestVc
