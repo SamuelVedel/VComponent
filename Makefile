@@ -31,8 +31,8 @@ run_tst:
 
 jar: $(JAR_FILE)
 
-#%.class: %.java
-#	$(JC) $(JCFLAGS) $?
+$(OUT_DIR)/%.class: $(SRC_DIR)/%.java
+	$(JC) $(JCFLAGS) $<
 
 .done: $(SRCS)
 	$(JC) $(JCFLAGS) $?
