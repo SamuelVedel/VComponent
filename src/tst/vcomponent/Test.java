@@ -35,7 +35,7 @@ public class Test {
 									 VB_WIDTH, VB_HEIGHT);
 	private VSwitch vs = new VSwitch(50, 50, /*110,*/ 50);
 	
-	private VLabel vl = new VLabel(50, 100, "Hey salut battard");
+	private VLabel vl = new VLabel(50, 100, "Hehe bonjour");
 	
 	private VNumberWriter vnw = new VNumberWriter(50, 150, /*50,*/ 30);
 	
