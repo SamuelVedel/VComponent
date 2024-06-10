@@ -98,6 +98,9 @@ public class Test {
 		vp.addKlToAComponent(jf);
 		vp.addMwlToAComponent(paint);
 		vb.setText("hey");
+		vb.getRound().setValue(0);
+		vb.getBorderWidth().setValue(5);
+		vb.setBorder(Color.WHITE);
 		vb.addVActionListener(vActL);
 		vs.addVActionListener(vActL);
 		vl.getFontSize().setValue(50);

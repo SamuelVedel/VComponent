@@ -1,5 +1,6 @@
 package fr.svedel.vcomponent;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -9,6 +10,8 @@ public class VButton extends VAbstractButton {
 	private String text;
 	private VAdjustInt fontSize = new VAdjustInt(50);
 	private VAdjustInt round = new VAdjustInt(50);
+	// TODO create VAdjustWidth
+	private VAdjustInt borderWidth = new VAdjustInt(1);
 	
 	// Couleur noraml du boutton.
 	private Color background = new Color(0, 0, 0, 200);
@@ -51,6 +54,10 @@ public class VButton extends VAbstractButton {
 	
 	public VAdjustInt getRound() {
 		return round;
+	}
+	
+	public VAdjustInt getBorderWidth() {
+		return borderWidth;
 	}
 	
 	public Color getBackground() {
@@ -106,6 +113,7 @@ public class VButton extends VAbstractButton {
 		super.adjust(widthReference, heightReference);
 		adjustValue(fontSize);
 		adjustValue(round);
+		adjustValue(borderWidth);
 	}
 	
 	@Override
@@ -118,10 +126,12 @@ public class VButton extends VAbstractButton {
 		g2d.setColor(!isMouseIn()? background : survolBackground);
 		g2d.fillRoundRect(currentX, currentY, currentWidth, currentHeight,
 						  round.getCurrentValue(), round.getCurrentValue());
-		
-		g2d.setColor(isMouseIn()? border : survolBorder);
+
+		g2d.setColor(isMouseIn()? survolBorder: border);
+		g2d.setStroke(new BasicStroke(borderWidth.getCurrentValue()));
 		g2d.drawRoundRect(currentX, currentY, currentWidth, currentHeight,
-						  round.getCurrentValue(), round.getCurrentValue());
+						  round.getCurrentValue(), round.getCurrentValue());;
+		g2d.setStroke(new BasicStroke(1));
 		
 		if (text != null) {
 			g2d.setColor(!isMouseIn()? foreground : survolForeground);
