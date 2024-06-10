@@ -40,6 +40,18 @@ public class VButton extends VAbstractButton {
 		this(x, y, w, h, 0, 0);
 	}
 	
+	public VButton(int w, int h, String text) {
+		this(0, 0, w, h, text);
+	}
+	
+	public VButton(int w, int h) {
+		this(0, 0, w, h);
+	}
+	
+	public VButton(String text) {
+		this(0, 0, text);
+	}
+	
 	public String getText() {
 		return text;
 	}
