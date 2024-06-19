@@ -23,3 +23,14 @@ You can also create an jar file with the command
 make jar
 ```
 and then do whatever you want with the jar file.
+
+## Utilisation
+
+It is possible to generate a documentation with the command
+```shell
+make doc
+```
+That generate a `doc` directory with the documentation in. To open the documentation, we have to open `doc/index.html`, for exemple:
+```shell
+firefox doc/index.html
+```
