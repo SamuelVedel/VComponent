@@ -1,6 +1,7 @@
 SRC_DIR := src
 OUT_DIR := bin
 OUT_DIR_TST := bin_tst
+OUT_DIR_DOC := doc
 
 SRCS := $(wildcard $(SRC_DIR)/fr/svedel/vcomponent/*.java)
 SRCS_TST := $(wildcard $(SRC_DIR)/tst/vcomponent/*.java)
@@ -15,7 +16,7 @@ INSTALL_PATH ?= $(HOME)/javalibs/vcomponent
 
 .SUFFIXES: .java .class
 
-.PHONY: all clean build build_tst run_tst jar
+.PHONY: all clean build build_tst run_tst jar doc
 
 all: build build_tst run_tst
 
@@ -45,7 +46,10 @@ $(OUT_DIR)/%.class: $(SRC_DIR)/%.java
 $(JAR_FILE):
 	jar -cf $@ -C $(OUT_DIR) .
 
+doc:
+	javadoc -encoding iso-8859-1 -d $(OUT_DIR_DOC) -cp $(SRC_DIR) fr.svedel.vcomponent
+
 clean:
-	rm -rf $(OUT_DIR) $(OUT_DIR_TST)
+	rm -rf $(OUT_DIR) $(OUT_DIR_TST) $(OUT_DIR_DOC)
 	rm -f .done .done_tst
 	rm -f *~ $(SRC_DIR)/*/*/*/*~ $(SRC_DIR)/*/*/*/*/*~ $(SRC_DIR)/*/*/*/*/*/*~

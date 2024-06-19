@@ -2,6 +2,7 @@
 .project
 .settings/*
 bin/*
+doc/*
 *.class
 .done
 .done_tst
