@@ -8,6 +8,8 @@ import java.awt.geom.Rectangle2D;
 /**
  * This class store functions that are used in all of the
  * package.
+ *
+ * @author Samuel Vedel
  */
 public abstract class UsefulTh {
 	

@@ -84,16 +84,16 @@ public abstract class VComponent
 	private boolean pressed = false;
 
 	/**
-	 * Create a VComponent.
+	 * Constructor for {@code VComponent}.
 	 *
-	 * @param x The abscisses of the component
-	 * @param y The ordinates of the component
-	 * @param w The width of the component
-	 * @param h The height of the component
-	 * @param widthReference The width for wich the
-	 * size and position of the component are the same as specified
-	 * @param heightReference The height for wich the
-	 * size and position of the component are the same as specified
+	 * @param x the abscissa of the component
+	 * @param y the ordinate of the component
+	 * @param w the width of the component
+	 * @param h the height of the component
+	 * @param widthReference the width for wich the
+	 * sizes and positions of the component are the same as specified
+	 * @param heightReference he height for wich the
+	 * sizes and positions of the component are the same as specified
 	 */
 	public VComponent(int x, int y, int w, int h, int widthReference, int heightReference) {
 		this.x = new VAdjustInt(x);
@@ -105,13 +105,12 @@ public abstract class VComponent
 	}
 	
 	/**
-	 * Create a VComponent.
+	 * Constructor for {@code VComponent}.
 	 *
-	 * @param x The abscisses of the component
-	 * @param y The ordinates of the component
+	 * @param x The abscissa of the component
+	 * @param y The ordinate of the component
 	 * @param w The width of the component
 	 * @param h The height of the component
-	 * @param widthReference The width for wich the
 	 */
 	public VComponent(int x, int y, int w, int h) {
 		this(x, y, w, h, 0, 0);
