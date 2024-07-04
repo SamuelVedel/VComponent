@@ -112,6 +112,14 @@ public class VPanel extends VComponent {
 		this(x, y, w, h, 0, 0);
 	}
 	
+	public VPanel(int w, int h) {
+		this(0, 0, w, h);
+	}
+	
+	public VPanel() {
+		this(0, 0, 0, 0);
+	}
+	
 	private void initListeners() {
 		addKeyListener(kl);
 		addMouseListener(ml);

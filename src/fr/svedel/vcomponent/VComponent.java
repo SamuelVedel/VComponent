@@ -117,6 +117,28 @@ public abstract class VComponent
 	}
 	
 	/**
+	 * Constructor for {@code VComponent}.
+	 *
+	 * @param w The width of the component
+	 * @param h The height of the component
+	 */
+	public VComponent(int w, int h) {
+		this(0, 0, w, h);
+	}
+	
+	/**
+	 * Constructor for {@code VComponent}.
+	 *
+	 * @param x The abscissa of the component
+	 * @param y The ordinate of the component
+	 * @param w The width of the component
+	 * @param h The height of the component
+	 */
+	public VComponent() {
+		this(0, 0);
+	}
+	
+	/**
 	 * Get the adjustable x value.
 	 *
 	 * @return The adjustable x value

@@ -79,6 +79,26 @@ public class VLabel extends VComponent {
 	}
 	
 	/**
+	 * Constructor for {@code VLabel}.
+	 * The width and height are automaticaly
+	 * generated with de font's properties
+	 *
+	 * @param text the text of the label
+	 */
+	public VLabel(String text) {
+		this(0, 0, text);
+	}
+	
+	/**
+	 * Constructor for {@code VLabel}.
+	 * The width and height are automaticaly
+	 * generated with de font's properties
+	 */
+	public VLabel() {
+		this(0, 0);
+	}
+	
+	/**
 	 * Return the text of the label
 	 *
 	 * @return the text
