@@ -67,6 +67,14 @@ public class VNumberWriter extends VComponent {
 		this(x, y, h, 0, 0);
 	}
 	
+	public VNumberWriter(int h) {
+		this(0, 0, h);
+	}
+	
+	public VNumberWriter() {
+		this(0);
+	}
+	
 	public int getNumber() {
 		return number;
 	}

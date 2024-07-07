@@ -34,3 +34,4 @@ That generate a `doc` directory with the documentation in. To open the documenta
 ```shell
 firefox doc/index.html
 ```
+But currently the documentation is very incomplete.

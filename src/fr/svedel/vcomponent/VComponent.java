@@ -84,16 +84,16 @@ public abstract class VComponent
 	private boolean pressed = false;
 
 	/**
-	 * Create a VComponent.
+	 * Constructor for {@code VComponent}.
 	 *
-	 * @param x The abscisses of the component
-	 * @param y The ordinates of the component
-	 * @param w The width of the component
-	 * @param h The height of the component
-	 * @param referenceWidth The width for wich the
-	 * size and position of the component are the same as specified
-	 * @param heightReference The height for wich the
-	 * size and position of the component are the same as specified
+	 * @param x the abscissa of the component
+	 * @param y the ordinate of the component
+	 * @param w the width of the component
+	 * @param h the height of the component
+	 * @param referenceWidth the width for wich the
+	 * sizes and positions of the component are the same as specified
+	 * @param referenceHeight he height for wich the
+	 * sizes and positions of the component are the same as specified
 	 */
 	public VComponent(int x, int y, int w, int h, int referenceWidth, int heightReference) {
 		this.x = new VAdjustInt(x);
@@ -105,22 +105,43 @@ public abstract class VComponent
 	}
 	
 	/**
-	 * Create a VComponent.
+	 * Constructor for {@code VComponent}.
 	 *
-	 * @param x The abscisses of the component
-	 * @param y The ordinates of the component
-	 * @param w The width of the component
-	 * @param h The height of the component
-	 * @param referenceWidth The width for wich the
+	 * @param x the abscissa of the component
+	 * @param y the ordinate of the component
+	 * @param w the width of the component
+	 * @param h the height of the component
 	 */
 	public VComponent(int x, int y, int w, int h) {
 		this(x, y, w, h, 0, 0);
 	}
 	
 	/**
+	 * Constructor for {@code VComponent}.
+	 *
+	 * @param w the width of the component
+	 * @param h the height of the component
+	 */
+	public VComponent(int w, int h) {
+		this(0, 0, w, h);
+	}
+	
+	/**
+	 * Constructor for {@code VComponent}.
+	 *
+	 * @param x the abscissa of the component
+	 * @param y the ordinate of the component
+	 * @param w the width of the component
+	 * @param h the height of the component
+	 */
+	public VComponent() {
+		this(0, 0);
+	}
+	
+	/**
 	 * Get the adjustable x value.
 	 *
-	 * @return The adjustable x value
+	 * @return the adjustable x value
 	 */
 	public VAdjustInt getX() {
 		return x;
@@ -129,7 +150,7 @@ public abstract class VComponent
 	/**
 	 * Get the adjustable y value.
 	 *
-	 * @return The adjustable y value
+	 * @return the adjustable y value
 	 */
 	public VAdjustInt getY() {
 		return y;
@@ -138,7 +159,7 @@ public abstract class VComponent
 	/**
 	 * Get the adjustable width value.
 	 *
-	 * @return The adjustable width value
+	 * @return the adjustable width value
 	 */
 	public VAdjustInt getWidth() {
 		return width;
@@ -147,7 +168,7 @@ public abstract class VComponent
 	/**
 	 * Get the adjustable height value.
 	 *
-	 * @return The adjustable height value
+	 * @return the adjustable height value
 	 */
 	public VAdjustInt getHeight() {
 		return height;
@@ -156,7 +177,7 @@ public abstract class VComponent
 	/**
 	 * Get the adjustable width reference value.
 	 *
-	 * @return The adjustable width reference value
+	 * @return the adjustable width reference value
 	 */
 	public VAdjustInt getReferenceWidth() {
 		return referenceWidth;
@@ -165,7 +186,7 @@ public abstract class VComponent
 	/**
 	 * Get the adjustable height reference value.
 	 *
-	 * @return The adjustable height reference value
+	 * @return the adjustable height reference value
 	 */
 	public VAdjustInt getReferenceHeight() {
 		return referenceHeight;
@@ -183,7 +204,7 @@ public abstract class VComponent
 	 * <li> {@code ADJUSTMENT_BY_THE_SMALLEST} </li>
 	 * </ul>
 	 *
-	 * @return The adjusment value
+	 * @return the adjusment value
 	 */
 	public int getAdjustment() {
 		return autoAdjustment;
@@ -201,7 +222,7 @@ public abstract class VComponent
 	 * <li> {@code ADJUSTMENT_BY_THE_SMALLEST} </li>
 	 * </ul>
 	 *
-	 * @param autoAdjusment The new adjustment value
+	 * @param autoAdjusment the new adjustment value
 	 */
 	public void setAdjustment(int autoAdjustment) {
 		this.autoAdjustment = autoAdjustment;
@@ -217,7 +238,7 @@ public abstract class VComponent
 	 * <li> {@code BOTTOM_ALIGNMENT} </li>
 	 * </ul>
 	 *
-	 * @return The alignment value
+	 * @return the alignment value
 	 */
 	public int getAlignment() {
 		return autoAlignment;
@@ -233,7 +254,7 @@ public abstract class VComponent
 	 * <li> {@code BOTTOM_ALIGNMENT} </li>
 	 * </ul>
 	 *
-	 * @param autoAlignment The new alignment value
+	 * @param autoAlignment the new alignment value
 	 */
 	public void setAlignment(int autoAlignment) {
 		this.autoAlignment = autoAlignment;
@@ -258,7 +279,7 @@ public abstract class VComponent
 	/**
 	 * Add a KeyListener to the component.
 	 *
-	 * @param kl The KeyListener we want to add
+	 * @param kl the KeyListener we want to add
 	 */
 	public void addKeyListener(KeyListener kl) {
 		keyLs.add(kl);
@@ -267,7 +288,7 @@ public abstract class VComponent
 	/**
 	 * Remove a KeyListener from the component.
 	 *
-	 * @param kl The KeyListener we want to removes
+	 * @param kl the KeyListener we want to removes
 	 */
 	public void removeKeyListener(KeyListener kl) {
 		for (int i = keyLs.size()-1; i >= 0; i--) {
@@ -287,7 +308,7 @@ public abstract class VComponent
 	/**
 	 * Add a MouseListener to the component.
 	 *
-	 * @param ml The MouseListener we want to add
+	 * @param ml the MouseListener we want to add
 	 */
 	public void addMouseListener(MouseListener ml) {
 		mouseLs.add(ml);
@@ -296,7 +317,7 @@ public abstract class VComponent
 	/**
 	 * Remove a MouseListener from the component.
 	 *
-	 * @param kl The MouseListener we want to remove
+	 * @param kl the MouseListener we want to remove
 	 */
 	public void removeMouseListener(MouseListener ml) {
 		for (int i = mouseLs.size()-1; i >= 0; i--) {
@@ -316,7 +337,7 @@ public abstract class VComponent
 	/**
 	 * Add a MouseMotionListener to the component.
 	 *
-	 * @param mml The MouseMotionListener we want to add
+	 * @param mml the MouseMotionListener we want to add
 	 */
 	public void addMouseMotionListener(MouseMotionListener mml) {
 		mouseMotionLs.add(mml);
@@ -325,7 +346,7 @@ public abstract class VComponent
 	/**
 	 * Remove a MouseMotionListener from the component.
 	 *
-	 * @param mml The MouseMotionListener we want to remove
+	 * @param mml the MouseMotionListener we want to remove
 	 */
 	public void removeMouseMotionListener(MouseMotionListener mml) {
 		for (int i = mouseMotionLs.size()-1; i >= 0; i--) {
@@ -345,7 +366,7 @@ public abstract class VComponent
 	/**
 	 * Add a MouseWheelListener to the component.
 	 *
-	 * @param mwl The MouseWheelListener we want to add
+	 * @param mwl the MouseWheelListener we want to add
 	 */
 	public void addMouseWheelListener(MouseWheelListener mwl) {
 		mouseWheelLs.add(mwl);
@@ -354,7 +375,7 @@ public abstract class VComponent
 	/**
 	 * Remove a MouseWheelListener from the component.
 	 *
-	 * @param mwll The mouseWheelListener we want to remove
+	 * @param mwll the mouseWheelListener we want to remove
 	 */
 	public void removeMouseWheelListener(MouseWheelListener mwl) {
 		for (int i = mouseWheelLs.size()-1; i >= 0; i--) {
@@ -376,7 +397,7 @@ public abstract class VComponent
 	 * To use keyboard event width a component
 	 * the focus is required.
 	 *
-	 * @return A boolean that says if the component has the focus
+	 * @return a boolean that says if the component has the focus
 	 */
 	public boolean hasFocus() {
 		return focus;
@@ -387,7 +408,7 @@ public abstract class VComponent
 	 * To use keyboard event width a component
 	 * the focus is required.
 	 *
-	 * @param focus The new focus of the component
+	 * @param focus the new focus of the component
 	 */
 	public void setFocus(boolean focus) {
 		this.focus = focus;
@@ -398,7 +419,7 @@ public abstract class VComponent
 	 * To use keyboard event width a component
 	 * the focus is required.
 	 *
-	 * @return A boolean that says if the component is focusable
+	 * @return a boolean that says if the component is focusable
 	 */
 	public boolean isFocusable() {
 		return focusable;
@@ -409,7 +430,7 @@ public abstract class VComponent
 	 * To use keyboard event width a component
 	 * the focus is required.
 	 *
-	 * @param fucusable A boolean that says if we
+	 * @param fucusable a boolean that says if we
 	 * want the comonent to be focusable of not
 	 */
 	public void setFocusable(boolean focusable) {
@@ -420,7 +441,7 @@ public abstract class VComponent
 	/**
 	 * Says if the mouse is in this component.
 	 *
-	 * @return A boolean that says if the mouse is in this component
+	 * @return a boolean that says if the mouse is in this component
 	 */
 	public boolean isMouseIn() {
 		return mouseIn;
@@ -429,7 +450,7 @@ public abstract class VComponent
 	/**
 	 * Says if a key is pressed with the focus on this component.
 	 *
-	 * @return A boolean that says if a key is pressed with the
+	 * @return a boolean that says if a key is pressed with the
 	 * focus on this component
 	 */
 	public boolean isPressed() {
@@ -440,7 +461,7 @@ public abstract class VComponent
 	 * Set a variable that describe if a key is pressed when the focus
 	 * is on this component
 	 *
-	 * @param pressed The new value of this variable
+	 * @param pressed the new value of this variable
 	 */
 	protected void setPressed(boolean pressed) {
 		this.pressed = pressed;
