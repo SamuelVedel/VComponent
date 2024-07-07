@@ -161,10 +161,10 @@ public class VPanel extends VComponent {
 	public void add(VComponent vc) {
 		vcList.add(vc);
 		
-		//vc.setWidthReference(getWidth());
-		vc.getWidthReference().setValue(getWidth().getValue());
-		//vc.setHeightReference(getHeight());
-		vc.getHeightReference().setValue(getHeight().getValue());
+		//vc.setReferenceWidth(getWidth());
+		vc.getReferenceWidth().setValue(getWidth().getValue());
+		//vc.setReferenceHeight(getHeight());
+		vc.getReferenceHeight().setValue(getHeight().getValue());
 		vc.setAdjustment(ADJUSTMENT_BY_WIDTH_AND_HEIGHT);
 		vc.setAlignment(NO_ALIGNMENT);
 	}

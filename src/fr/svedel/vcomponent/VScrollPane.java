@@ -184,7 +184,7 @@ public class VScrollPane extends VComponent {
 				
 				xScroll.setCurrentValue(xScrollWhenPressed+deltaMouseX
 										*currentVpWidth/currentXSRLength);
-				xScroll.reverseAdjust(getWidthReference());
+				xScroll.reverseAdjust(getReferenceWidth());
 				if (xScroll.getValue() < 0) xScroll.setValue(0);
 				else if (xScroll.getValue() > vpWidth-width) {
 					xScroll.setValue(vpWidth-width);
@@ -201,7 +201,7 @@ public class VScrollPane extends VComponent {
 				
 				yScroll.setCurrentValue(yScrollWhenPressed+deltaMouseY
 										*currentVpHeight/currentYSRLength);
-				yScroll.reverseAdjust(getWidthReference());
+				yScroll.reverseAdjust(getReferenceWidth());
 				if (yScroll.getValue() < 0) yScroll.setValue(0);
 				else if (yScroll.getValue() > vpHeight-height) {
 					yScroll.setValue(vpHeight-height);
@@ -272,8 +272,8 @@ public class VScrollPane extends VComponent {
 		this.vp = vp;
 		
 		if (this.vp != null) {
-			vp.getWidthReference().setValue(getWidth().getValue());
-			vp.getHeightReference().setValue(getHeight().getValue());
+			vp.getReferenceWidth().setValue(getWidth().getValue());
+			vp.getReferenceHeight().setValue(getHeight().getValue());
 			vp.setAdjustment(ADJUSTMENT_BY_WIDTH_AND_HEIGHT);
 			vp.setAlignment(NO_ALIGNMENT);
 		}

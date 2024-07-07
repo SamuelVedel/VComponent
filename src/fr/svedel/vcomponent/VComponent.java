@@ -61,8 +61,8 @@ public abstract class VComponent
 //	public static final int TOP_ALIGNMENT = LEFT_ALIGNMENT;
 //	public static final int BOTTOM_ALIGNMENT = RIGHT_ALIGNMENT;
 	
-	private VAdjustInt widthReference;
-	private VAdjustInt heightReference;
+	private VAdjustInt referenceWidth;
+	private VAdjustInt referenceHeight;
 	private int autoAdjustment = NO_ADJUSTMENT;
 	private int autoAlignment = NO_ALIGNMENT;
 //	private int horizontalAlignment = LEFT_ALIGNMENT;
@@ -90,18 +90,18 @@ public abstract class VComponent
 	 * @param y The ordinates of the component
 	 * @param w The width of the component
 	 * @param h The height of the component
-	 * @param widthReference The width for wich the
+	 * @param referenceWidth The width for wich the
 	 * size and position of the component are the same as specified
 	 * @param heightReference The height for wich the
 	 * size and position of the component are the same as specified
 	 */
-	public VComponent(int x, int y, int w, int h, int widthReference, int heightReference) {
+	public VComponent(int x, int y, int w, int h, int referenceWidth, int heightReference) {
 		this.x = new VAdjustInt(x);
 		this.y = new VAdjustInt(y);
 		this.width = new VAdjustInt(w);
 		this.height = new VAdjustInt(h);
-		this.widthReference = new VAdjustInt(widthReference);
-		this.heightReference = new VAdjustInt(heightReference);
+		this.referenceWidth = new VAdjustInt(referenceWidth);
+		this.referenceHeight = new VAdjustInt(heightReference);
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public abstract class VComponent
 	 * @param y The ordinates of the component
 	 * @param w The width of the component
 	 * @param h The height of the component
-	 * @param widthReference The width for wich the
+	 * @param referenceWidth The width for wich the
 	 */
 	public VComponent(int x, int y, int w, int h) {
 		this(x, y, w, h, 0, 0);
@@ -158,8 +158,8 @@ public abstract class VComponent
 	 *
 	 * @return The adjustable width reference value
 	 */
-	public VAdjustInt getWidthReference() {
-		return widthReference;
+	public VAdjustInt getReferenceWidth() {
+		return referenceWidth;
 	}
 	
 	/**
@@ -167,8 +167,8 @@ public abstract class VComponent
 	 *
 	 * @return The adjustable height reference value
 	 */
-	public VAdjustInt getHeightReference() {
-		return heightReference;
+	public VAdjustInt getReferenceHeight() {
+		return referenceHeight;
 	}
 	
 	/**
@@ -631,20 +631,20 @@ public abstract class VComponent
 			break;
 		case ADJUSTMENT_BY_WIDTH_AND_HEIGHT :
 			if (preferenceForWidth) {
-				value.adjust(widthReference);
+				value.adjust(referenceWidth);
 			} else {
-				value.adjust(heightReference);
+				value.adjust(referenceHeight);
 			}
 			break;
 		case ADJUSTMENT_BY_WIDTH :
-			value.adjust(widthReference);
+			value.adjust(referenceWidth);
 			break;
 		case ADJUSTMENT_BY_HEIGHT :
-			value.adjust(heightReference);
+			value.adjust(referenceHeight);
 			break;
 		case ADJUSTMENT_BY_THE_SMALLEST :
-			if (widthReference.getValue()*width.getValue()/widthReference.getCurrentValue()
-				>= heightReference.getValue()*width.getValue()/heightReference.getCurrentValue()) {
+			if (referenceWidth.getValue()*width.getValue()/referenceWidth.getCurrentValue()
+				>= referenceHeight.getValue()*width.getValue()/referenceHeight.getCurrentValue()) {
 				autoAdjustment = ADJUSTMENT_BY_WIDTH;
 				adjustValue(value, preferenceForWidth);
 			} else {
@@ -669,14 +669,14 @@ public abstract class VComponent
 	/**
 	 * Adjust all the adjustable values of the component
 	 *
-	 * @param widthReference the current width reference,
+	 * @param referenceWidth the current width reference,
 	 * for exemple the current width of a {@code JPanel}
-	 * @param heightReference the current height reference,
+	 * @param referenceHeight the current height reference,
 	 * for exemple the current height of a {@code JPanel}
 	 */
 	public void adjust(int widthRefrence, int heightRefrence) {
-		this.widthReference.setCurrentValue(widthRefrence);
-		this.heightReference.setCurrentValue(heightRefrence);
+		this.referenceWidth.setCurrentValue(widthRefrence);
+		this.referenceHeight.setCurrentValue(heightRefrence);
 		
 		switch (autoAdjustment) {
 		case NO_ADJUSTMENT :
@@ -687,50 +687,50 @@ public abstract class VComponent
 			y.adjust(null);
 			break;
 		case ADJUSTMENT_BY_WIDTH_AND_HEIGHT :
-			width.adjust(widthReference);
-			height.adjust(heightReference);
+			width.adjust(referenceWidth);
+			height.adjust(referenceHeight);
 			
-			x.adjust(widthReference);
-			y.adjust(heightReference);
+			x.adjust(referenceWidth);
+			y.adjust(referenceHeight);
 			break;
 		case ADJUSTMENT_BY_WIDTH :
-			width.adjust(widthReference);
-			height.adjust(widthReference);
+			width.adjust(referenceWidth);
+			height.adjust(referenceWidth);
 			
-			x.adjust(widthReference);
+			x.adjust(referenceWidth);
 			if (autoAlignment == NO_ALIGNMENT) {
-				y.adjust(widthReference);
+				y.adjust(referenceWidth);
 			} else if (autoAlignment == CENTER_ALIGNMENT) {
-				y.adjust(y.getValue()+height.getValue()/2, heightReference);
+				y.adjust(y.getValue()+height.getValue()/2, referenceHeight);
 				y.setCurrentValue(y.getCurrentValue()-height.getCurrentValue()/2);
 			} else {
-				y.adjust(heightReference.getValue()-(y.getValue()+height.getValue()),
-						 widthReference);
-				y.setCurrentValue(heightReference.getCurrentValue()
+				y.adjust(referenceHeight.getValue()-(y.getValue()+height.getValue()),
+						 referenceWidth);
+				y.setCurrentValue(referenceHeight.getCurrentValue()
 								  -y.getCurrentValue()-height.getCurrentValue());
 			}
 			break;
 		case ADJUSTMENT_BY_HEIGHT :
-			width.adjust(heightReference);
-			height.adjust(heightReference);
+			width.adjust(referenceHeight);
+			height.adjust(referenceHeight);
 			
 			if (autoAlignment == NO_ALIGNMENT) {
-				x.adjust(heightReference);
+				x.adjust(referenceHeight);
 			} else if (autoAlignment == CENTER_ALIGNMENT) {
-				x.adjust(x.getValue()+width.getValue()/2, widthReference);
+				x.adjust(x.getValue()+width.getValue()/2, referenceWidth);
 				x.setCurrentValue(x.getCurrentValue()-width.getCurrentValue()/2);
 			} else if (autoAlignment == BOTTOM_ALIGNMENT) {
-				x.adjust(widthReference.getValue()-(x.getValue()+width.getValue()),
-						 heightReference);
-				x.setCurrentValue(widthReference.getCurrentValue()
+				x.adjust(referenceWidth.getValue()-(x.getValue()+width.getValue()),
+						 referenceHeight);
+				x.setCurrentValue(referenceWidth.getCurrentValue()
 								  -x.getCurrentValue()-width.getCurrentValue());
 			}
-			y.adjust(heightReference);
+			y.adjust(referenceHeight);
 			break;
 		case ADJUSTMENT_BY_THE_SMALLEST :
-			if (widthReference.getValue()*width.getValue()/widthReference.getCurrentValue()
-				>= heightReference.getValue()
-				   *width.getValue()/heightReference.getCurrentValue()) {
+			if (referenceWidth.getValue()*width.getValue()/referenceWidth.getCurrentValue()
+				>= referenceHeight.getValue()
+				   *width.getValue()/referenceHeight.getCurrentValue()) {
 				autoAdjustment = ADJUSTMENT_BY_WIDTH;
 				adjust(widthRefrence, heightRefrence);
 			} else {
