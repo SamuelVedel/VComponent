@@ -189,6 +189,14 @@ public class VPanel extends VComponent {
 		}
 	}
 	
+	public void updateSonsReferences() {
+		for (int i = 0; i < vcList.size(); ++i) {
+			VComponent vc = vcList.get(i);
+			vc.getReferenceWidth().setValue(getWidth().getValue());
+			vc.getReferenceHeight().setValue(getHeight().getValue());
+		}
+	}
+	
 	@Override
 	public void adjust(int widthRefrence, int heightRefrence) {
 		super.adjust(widthRefrence, heightRefrence);
