@@ -86,12 +86,12 @@ public class Test {
 		vp.add(vb);
 		vp.add(vs);
 		vp.add(vl);
-		//vp.setAdjustment(VComponent.ADJUSTMENT_BY_WIDTH);
+		vp.setAdjustment(VComponent.ADJUSTMENT_BY_WIDTH);
 		//vp.setAdjustment(VComponent.ADJUSTMENT_BY_HEIGHT);
-		vp.setAdjustment(VComponent.ADJUSTMENT_BY_THE_SMALLEST);
+		//vp.setAdjustment(VComponent.ADJUSTMENT_BY_THE_SMALLEST);
 		//vp.setAdjustment(VComponent.ADJUSTMENT_BY_WIDTH_AND_HEIGHT);
-		vp.setAlignment(VComponent.NO_ALIGNMENT);
-		//vp.setAlignment(VComponent.CENTER_ALIGNMENT);
+		//vp.setAlignment(VComponent.NO_ALIGNMENT);
+		vp.setAlignment(VComponent.CENTER_ALIGNMENT);
 		//vp.setAlignment(VComponent.BOTTOM_ALIGNMENT);
 		vp.addMlToAComponent(paint);
 		vp.addMmlToAComponent(paint);
