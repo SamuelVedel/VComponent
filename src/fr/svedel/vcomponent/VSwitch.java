@@ -76,6 +76,14 @@ public class VSwitch extends VAbstractButton {
 		this(x, y, h, 0, 0);
 	}
 	
+	public VSwitch(int h) {
+		this(0, 0, h);
+	}
+	
+	public VSwitch() {
+		this(0);
+	}
+	
 	public boolean getState() {
 		return on;
 	}
